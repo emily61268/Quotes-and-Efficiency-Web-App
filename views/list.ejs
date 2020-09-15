@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>To Do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" href="css/to-do-list.css">
   </head>
   <body>
@@ -10,11 +11,30 @@
     <div class="box" id="heading">
 
       <% if(parseInt(currentHour) >= 4 && parseInt(currentHour) <= 12){ %>
-         <h1>Good morning! <br/> It's <%= kindOfDay %>.</h1>
+         <h1>Good morning.
+           <br/>
+           <p class="headingText">It's <%= kindOfDay %>.
+           <br/> The temperature in <%= userLocation %> is <%= temperature %> degrees Celcius.
+           <br/> The weather is currently <%= weather %>.
+           </p>
+         </h1>
       <% } else if(parseInt(currentHour) >= 13 && parseInt(currentHour) <= 18){ %>
-        <h1>Good afternoon! <br/>  It's <%= kindOfDay %>.</h1>
+        <h1>Good afternoon.
+          <br/>
+          <p class="headingText">It's <%= kindOfDay %>.
+          <br/> The temperature in <%= userLocation %> is <%= temperature %> degrees Celcius.
+          <br/> The weather is currently <%= weather %>.
+        </p>
+        </h1>
       <% } else { %>
-        <h1>Good evening! <br/>  It's <%= kindOfDay %>.</h1>
+        <h1>Good evening.
+          <br/>
+          <p class="headingText">It's <%= kindOfDay %>.
+          <br/> The temperature in <%= userLocation %> is <%= temperature %> degrees Celcius.
+          <br/> The weather is currently <%= weather %>.
+          <br/> <img src = <%= imgURL %> >
+          </p>
+         </h1>
       <% } %>
 
     </div>
@@ -32,6 +52,6 @@
         <button type="submit" name="button">+</button>
       </form>
     </div>
-
+  <script src="js/to-do-list.js"></script>
   </body>
 </html>
