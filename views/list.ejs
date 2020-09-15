@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="css/to-do-list.css">
+  </head>
+  <body>
+
+    <div class="box" id="heading">
+
+      <% if(parseInt(currentHour) >= 4 && parseInt(currentHour) <= 12){ %>
+         <h1>Good morning! <br/> It's <%= kindOfDay %>.</h1>
+      <% } else if(parseInt(currentHour) >= 13 && parseInt(currentHour) <= 18){ %>
+        <h1>Good afternoon! <br/>  It's <%= kindOfDay %>.</h1>
+      <% } else { %>
+        <h1>Good evening! <br/>  It's <%= kindOfDay %>.</h1>
+      <% } %>
+
+    </div>
+
+    <div class="box">
+      <% for(var i = 0; i < newTasks.length; i++){ %>
+        <div class="item">
+          <input type="checkbox">
+          <p>  <%=newTasks[i]%> </p>
+        </div>
+      <% } %>
+
+      <form class="item" action="/" method="post">
+        <input type="text" name="taskName" placeholder="Enter a task" autofocus autocomplete="off" required>
+        <button type="submit" name="button">+</button>
+      </form>
+    </div>
+
+  </body>
+</html>
