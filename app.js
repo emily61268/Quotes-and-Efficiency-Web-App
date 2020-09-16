@@ -14,8 +14,6 @@ app.use(bodyParser.urlencoded({
 
 
 let tasks = [];
-let day = "";
-let time = "";
 let temp = "";
 let weatherDescription = "";
 let icon = "";
@@ -25,27 +23,18 @@ let place = "";
 
 app.get("/", function(req, res) {
 
-  //Get date and time
-  let today = new Date();
+  var ipAddr = req.headesrs["x-forwarded-for"];
+  if (ipAddr){
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length-1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
 
-  let options = {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  };
 
-  let options2 = {
-    hour12: false
-  };
-  day = today.toLocaleDateString("en-US", options);
-  time = today.toLocaleTimeString("en-GB", options2);
-  time = time.substring(0, 2);
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
-  let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
   https.get(ipurl, function(response) {
     response.on("data", function(data){
       //Get user location
@@ -81,9 +70,7 @@ app.get("/", function(req, res) {
 
   console.log(temp, weatherDescription);
   res.render("list", {
-    kindOfDay: day,
     newTasks: tasks,
-    currentHour: time,
     weather: weatherDescription,
     temperature: temp,
     imgURL: imageURL,
