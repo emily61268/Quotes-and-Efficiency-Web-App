@@ -114,6 +114,10 @@ app.post("/", function(req, res) {
   else if (buttonValue === "signup") {
     res.redirect("https://signup-page-11090.herokuapp.com/");
   }
+  else{
+    tasks=[];
+    res.redirect("/");
+  }
 });
 
 
