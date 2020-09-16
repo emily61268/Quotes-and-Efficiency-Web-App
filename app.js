@@ -23,7 +23,7 @@ let place = "";
 
 app.get("/", function(req, res) {
 
-  var ipAddr = req.headesrs["x-forwarded-for"];
+  var ipAddr = req.headers["x-forwarded-for"];
   if (ipAddr){
     var list = ipAddr.split(",");
     ipAddr = list[list.length-1];
