@@ -57,12 +57,17 @@ $(document).ready(function() {
 
 $(document).ready(function() {
   $("#flip").click(function() {
-    $("#panel").slideToggle("slow");
     if($("#panel").css("display") === 'block'){
       $.ajax(settings).done(function(response) {
         $("#quotes").text(response.content);
         $("#author").text("- " + response.originator.name);
       });
     }
+  });
+});
+
+$(document).ready(function() {
+  $("#flip").click(function() {
+    $("#panel").slideToggle("slow");
   });
 });
