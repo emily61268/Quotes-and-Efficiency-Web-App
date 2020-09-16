@@ -2,7 +2,6 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
-const http = require('http');
 
 
 
@@ -46,9 +45,10 @@ app.get("/", function(req, res) {
   time = today.toLocaleTimeString("en-GB", options2);
   time = time.substring(0, 2);
 
-  let ipurl = "http://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b";
-  http.get(ipurl, function(response) {
+  let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  https.get(ipurl, function(response) {
     response.on("data", function(data){
+      //Get user location
       let ipData = JSON.parse(data);
       place = ipData.city + "," + ipData.region_name;
 
