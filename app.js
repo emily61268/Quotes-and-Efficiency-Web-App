@@ -83,7 +83,7 @@ app.post("/", function(req, res) {
   if (buttonValue === "addTask") {
     let task = req.body.taskName;
     tasks.push(task);
-    res.redirect("/");
+    res.redirect("https://quotes-and-efficiency.herokuapp.com/#loaded");
   } else if (buttonValue === "signup") {
     res.redirect("https://signup-page-11090.herokuapp.com/");
   } else {
