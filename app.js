@@ -60,10 +60,10 @@ app.get("/", function(req, res) {
       console.log('Request failed');
     })
 
-  //var loc = cityName + "," + state;
-  //place = cityName + ", " + state;
-  var loc = "Alpine,Texas";
-  place = "Alpine, Texas"
+  var loc = cityName + "," + state;
+  place = cityName + ", " + state;
+  // var loc = "Alpine,Texas";
+  // place = "Alpine, Texas"
   console.log(place);
 
   //Get current weather
