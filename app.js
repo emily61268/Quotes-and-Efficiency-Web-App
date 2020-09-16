@@ -1,9 +1,10 @@
 const express = require("express");
-const expressip = require('express-ip');
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
 const fetch = require("node-fetch");
+var address = require('address');
+const GetLocation = require('location-by-ip');
 
 
 const app = express();
@@ -12,7 +13,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-app.use(expressip().getIpInfoMiddleware);
+
 
 
 let tasks = [];
@@ -46,29 +47,34 @@ app.get("/", function(req, res) {
   time = today.toLocaleTimeString("en-GB", options2);
   time = time.substring(0, 2);
 
-  var cityName;
-  var state;
-  var counCode;
 
   //Get users location
-  // fetch('https://extreme-ip-lookup.com/json/')
-  //   .then(res => res.json())
-  //   .then(response => {
-  //     cityName = response.city;
-  //     state = response.region;
-  //     counCode = response.countryCode;
-  //     console.log("Country: ", response.country);
-  //   })
-  //   .catch((data, status) => {
-  //     console.log('Request failed');
-  //   })
-  const ipInfo = req.ipInfo;
+  var option = {
+    method: 'GET',
+    url: 'https://spott.p.rapidapi.com/places/ip/' + address.ip(),
+    qs: {
+      language: 'en'
+    },
+    headers: {
+      'x-rapidapi-host': 'spott.p.rapidapi.com',
+      'x-rapidapi-key': '262c7ebcffmsh8849fcbb203742bp1dcdddjsn28a1c31e979a',
+      useQueryString: true
+    }
+  };
 
-  var loc = ipInfo.city + "," + ipInfo.country;
-  place = ipInfo.city + ", " + ipInfo.country;
-  // var loc = "Alpine,Texas";
-  // place = "Alpine, Texas"
-  console.log(place);
+  var cityName;
+  var state;
+
+  request(option, function(error, response, body) {
+    if (error) throw new Error(error);
+    let locationData = JSON.parse(body);
+    cityName = locationData.name;
+    state = locationData.adminDivision1.name;
+  });
+
+
+  var loc = cityName + "," + state;
+  place = cityName + ", " + state;
 
   //Get current weather
   let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -114,12 +120,10 @@ app.post("/", function(req, res) {
     let task = req.body.taskName;
     tasks.push(task);
     res.redirect("/");
-  }
-  else if (buttonValue === "signup") {
+  } else if (buttonValue === "signup") {
     res.redirect("https://signup-page-11090.herokuapp.com/");
-  }
-  else{
-    tasks=[];
+  } else {
+    tasks = [];
     res.redirect("/");
   }
 });
