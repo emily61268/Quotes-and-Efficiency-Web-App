@@ -9,6 +9,13 @@ var settings = {
   }
 }
 
+window.onload = function() {
+    if(!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+    }
+}
+
 $(document).ready(function() {
   var access_key = 'eb287c9a351aa80dd5b81e4fa9a45f6b';
 
