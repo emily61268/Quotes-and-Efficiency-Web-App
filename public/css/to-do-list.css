@@ -2,7 +2,7 @@ html {
   /* background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(0,0,0,0.6) 100%), url("/img/to-do-list_mid.jpg") center; */
   background: linear-gradient(to bottom, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.6) 100%), url("/img/to-do-list_mid.jpg") center;
   min-height: 1000px;
-  font-family: 'helvetica neue';
+  font-family: 'Montserrat', cursive;
 }
 
 h1 {
@@ -17,6 +17,13 @@ h1 {
   background: white;
   border-radius: 5px;
   box-shadow: 5px 5px 15px -5px rgba(0, 0, 0, 0.3);
+}
+
+.buttonBox {
+  max-width: 400px;
+  margin: 50px auto;
+  text-align: center;
+
 }
 
 #heading {
@@ -38,7 +45,7 @@ h1 {
 
 input:checked+p {
   text-decoration: line-through;
-  text-decoration-color: #cbaf87;
+  text-decoration-color: #931a25;
 }
 
 input[type="checkbox"] {
@@ -62,7 +69,11 @@ form {
   margin-left: 20px;
 }
 
-button {
+.buttons {
+  margin-left: 0 !important;
+}
+
+.itemButton {
   min-height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -72,6 +83,35 @@ button {
   font-size: 30px;
   padding-bottom: 2px;
   border-width: 0;
+}
+
+.quoteButton{
+  color: #fff !important;
+  width: 175px;
+  height: 50px;
+  margin-top: 10px;
+  font-family: 'Montserrat', cursive;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none !important;
+  background: #cbaf87;
+  padding: 5px;
+  border-radius: 5px;
+  display: inline-block;
+  border: none;
+  transition: all .4s ease 0s;
+}
+
+.quoteButton:hover {
+  background: #30475e;
+  font-family: 'Montserrat', cursive;
+  letter-spacing: 1px;
+  -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+  -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+  box-shadow: 5px 40px -10px rgba(0, 0, 0, 0.57);
+  transition: all .4s ease 0s;
+  text-decoration: none !important;
 }
 
 input[type="text"] {
@@ -93,6 +133,29 @@ input[type="text"]:focus {
 ::placeholder {
   color: grey;
   opacity: 1;
+  font-family: 'Montserrat', cursive;
+}
+
+#panel {
+  width: 350px;
+  margin: -1px auto;
+  border-radius: 6px;
+  background-color: #cbaf87;
+  text-align: center;
+  border: solid 1px #c3c3c3;
+  padding: 5px;
+  display: none;
+}
+
+#quotes{
+  font-size: 17px;
+  text-align: left;
+}
+
+#author{
+  font-size: 17px;
+  float: right;
+  padding: 0 20px;
 }
 
 footer {

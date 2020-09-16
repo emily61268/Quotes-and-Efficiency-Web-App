@@ -2,8 +2,9 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>To Do List</title>
+    <title>Quotes and Efficiency</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="js/to-do-list.js"></script>
     <link rel="stylesheet" href="css/to-do-list.css">
   </head>
   <body>
@@ -16,6 +17,7 @@
            <p class="headingText">It's <%= kindOfDay %>.
            <br/> The temperature in <%= userLocation %> is <%= temperature %> degrees Celcius.
            <br/> The weather is currently <%= weather %>.
+           <br/> <img src = <%= imgURL %> >
            </p>
          </h1>
       <% } else if(parseInt(currentHour) >= 13 && parseInt(currentHour) <= 18){ %>
@@ -24,6 +26,7 @@
           <p class="headingText">It's <%= kindOfDay %>.
           <br/> The temperature in <%= userLocation %> is <%= temperature %> degrees Celcius.
           <br/> The weather is currently <%= weather %>.
+          <br/> <img src = <%= imgURL %> >
         </p>
         </h1>
       <% } else { %>
@@ -48,10 +51,23 @@
       <% } %>
 
       <form class="item" action="/" method="post">
-        <input type="text" name="taskName" placeholder="Enter a task" autofocus autocomplete="off" required>
-        <button type="submit" name="button">+</button>
+        <input type="text" name="taskName" placeholder="What's on your list today?" autofocus autocomplete="off" required>
+        <button class="itemButton" type="submit" name="button" value="addTask">+</button>
       </form>
     </div>
-  <script src="js/to-do-list.js"></script>
+    <div class="buttonBox">
+      <button class="buttons quoteButton" id="flip" type="submit" name="button" value="inspire">Famous Quotes!</button>
+      <div id="panel">
+        <p id="quotes">
+          Breathe. It’s only a bad day, not a bad life.
+          <p id="author">- Johnny Depp</p>
+        </p>
+      </div>
+      <form class="buttons" action="/" method="post" target="_blank">
+        <button class="quoteButton" type="submit" name="button" value="signup">Sign Me Up For More Famous Quotes!</button>
+      </form>
+    </div>
+
   </body>
+  <footer>&copy Emily Huang 2020</footer>
 </html>
