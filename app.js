@@ -85,7 +85,7 @@ app.post("/", function(req, res) {
     tasks.push(task);
     res.redirect("https://quotes-and-efficiency.herokuapp.com/#loaded");
   } else if (buttonValue === "signup") {
-    res.redirect("https://signup-page-11090.herokuapp.com/");
+    res.redirect("https://signup-page-for-q-and-e.herokuapp.com/");
   } else {
     tasks = [];
     res.redirect("/");
