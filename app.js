@@ -1,4 +1,5 @@
 const express = require("express");
+const expressip = require('express-ip');
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
@@ -11,6 +12,8 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(expressip().getIpInfoMiddleware);
+
 
 let tasks = [];
 let day = "";
@@ -48,20 +51,21 @@ app.get("/", function(req, res) {
   var counCode;
 
   //Get users location
-  fetch('https://extreme-ip-lookup.com/json/')
-    .then(res => res.json())
-    .then(response => {
-      cityName = response.city;
-      state = response.region;
-      counCode = response.countryCode;
-      console.log("Country: ", response.country);
-    })
-    .catch((data, status) => {
-      console.log('Request failed');
-    })
+  // fetch('https://extreme-ip-lookup.com/json/')
+  //   .then(res => res.json())
+  //   .then(response => {
+  //     cityName = response.city;
+  //     state = response.region;
+  //     counCode = response.countryCode;
+  //     console.log("Country: ", response.country);
+  //   })
+  //   .catch((data, status) => {
+  //     console.log('Request failed');
+  //   })
+  const ipInfo = req.ipInfo;
 
-  var loc = cityName + "," + state;
-  place = cityName + ", " + state;
+  var loc = ipInfo.city + "," + ipInfo.state;
+  place = ipInfo.city + ", " + ipInfo.state;
   // var loc = "Alpine,Texas";
   // place = "Alpine, Texas"
   console.log(place);
