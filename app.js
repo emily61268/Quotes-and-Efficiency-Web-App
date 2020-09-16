@@ -2,9 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
+const http = require('http');
 const fetch = require("node-fetch");
-var address = require('address');
-const GetLocation = require('location-by-ip');
+
 
 
 const app = express();
@@ -13,7 +13,6 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({
   extended: true
 }));
-
 
 
 let tasks = [];
@@ -27,6 +26,7 @@ let place = "";
 
 
 app.get("/", function(req, res) {
+
   //Get date and time
   let today = new Date();
 
@@ -47,57 +47,36 @@ app.get("/", function(req, res) {
   time = today.toLocaleTimeString("en-GB", options2);
   time = time.substring(0, 2);
 
+  let ipurl = "http://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b";
+  http.get(ipurl, function(response) {
+    response.on("data", function(data){
+      let ipData = JSON.parse(data);
+      place = ipData.city + "," + ipData.region_name;
 
-  //Get users location
-  var option = {
-    method: 'GET',
-    url: 'https://spott.p.rapidapi.com/places/ip/' + address.ip(),
-    qs: {
-      language: 'en'
-    },
-    headers: {
-      'x-rapidapi-host': 'spott.p.rapidapi.com',
-      'x-rapidapi-key': '262c7ebcffmsh8849fcbb203742bp1dcdddjsn28a1c31e979a',
-      useQueryString: true
-    }
-  };
+      //Get current weather
+      let apiID = "cd10a33402703dfcf0920bec36d23c54";
+      let units = "metric";
+      let url = "https://api.openweathermap.org/data/2.5/weather?q=" + place + "&appid=" + apiID + "&units=" + units;
+      https.get(url, function(response) {
+        //Check the url/API key is working by checking the status code.
+        console.log(response.statusCode);
 
-  var cityName;
-  var state;
+        //Fetch partial/all data from API and print it via console log.
+        response.on("data", function(data) {
 
-  request(option, function(error, response, body) {
-    if (error) throw new Error(error);
-    let locationData = JSON.parse(body);
-    cityName = locationData.name;
-    state = locationData.adminDivision1.name;
-  });
+          let weatherData = JSON.parse(data);
 
+          //After we parsed it into JSON format, we can use it to get data.
+          /*Recommend: Use JSON Viewer Aweson (Chorme extension) to get the
+            path of the specific data that you want to use.
+          */
+          temp = parseInt(weatherData.main.temp);
+          weatherDescription = weatherData.weather[0].description;
+          icon = weatherData.weather[0].icon;
+          imageURL = "https://openweathermap.org/img/wn/" + icon + ".png";
 
-  var loc = cityName + "," + state;
-  place = cityName + ", " + state;
-
-  //Get current weather
-  let apiID = "cd10a33402703dfcf0920bec36d23c54";
-  let units = "metric";
-  let url = "https://api.openweathermap.org/data/2.5/weather?q=" + loc + "&appid=" + apiID + "&units=" + units;
-  https.get(url, function(response) {
-    //Check the url/API key is working by checking the status code.
-    console.log(response.statusCode);
-
-    //Fetch partial/all data from API and print it via console log.
-    response.on("data", function(data) {
-
-      let weatherData = JSON.parse(data);
-
-      //After we parsed it into JSON format, we can use it to get data.
-      /*Recommend: Use JSON Viewer Aweson (Chorme extension) to get the
-        path of the specific data that you want to use.
-      */
-      temp = parseInt(weatherData.main.temp);
-      weatherDescription = weatherData.weather[0].description;
-      icon = weatherData.weather[0].icon;
-      imageURL = "https://openweathermap.org/img/wn/" + icon + ".png";
-
+        });
+      });
     });
   });
 
@@ -107,7 +86,6 @@ app.get("/", function(req, res) {
     newTasks: tasks,
     currentHour: time,
     weather: weatherDescription,
-    userLocation: place,
     temperature: temp,
     imgURL: imageURL,
   });
