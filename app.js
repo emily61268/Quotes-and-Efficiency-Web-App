@@ -64,8 +64,8 @@ app.get("/", function(req, res) {
   //   })
   const ipInfo = req.ipInfo;
 
-  var loc = ipInfo.city + "," + ipInfo.state;
-  place = ipInfo.city + ", " + ipInfo.state;
+  var loc = ipInfo.city + "," + ipInfo.country;
+  place = ipInfo.city + ", " + ipInfo.country;
   // var loc = "Alpine,Texas";
   // place = "Alpine, Texas"
   console.log(place);
