@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Quotes and Efficiency</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="css/to-do-list.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merienda+One&family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <div class="box" id="heading">
+
+    <h1>Good morning.</h1>
+    <p class="headingText">It's <span class="dateTime"></span>.
+      <br /> The temperature in <span class="city"></span> is <%= temperature %> degrees Celcius.
+      <br /> The weather is currently <%= weather %>.
+      <br /> <img src=<%= imgURL %>>
+    </p>
+
+  </div>
+
+  <div class="box">
+    <% for(var i = 0; i < newTasks.length; i++){ %>
+    <div class="item">
+      <input type="checkbox">
+      <p> <%=newTasks[i]%> </p>
+    </div>
+    <% } %>
+
+    <form class="item" action="/" method="post">
+      <input type="text" name="taskName" placeholder="What's on your list today?" autofocus autocomplete="off" required>
+      <button class="itemButton" type="submit" name="button" value="addTask">+</button>
+    </form>
+  </div>
+  <div class="buttonBox">
+    <form class="buttons" action="/" method="post">
+      <button class="buttons quoteButton" value="clear" type="submit">Start a New List</button>
+    </form>
+    <button class="buttons quoteButton" id="flip" type="submit">Time For Some Celebrity Quotes!</button>
+    <div id="panel">
+      <p id="quotes">
+        You cannot get through a single day without having an impact on the world around you. What you do makes a difference, and you have to decide what kind of difference you want to make.
+        <p id="author">- Jane Goodall</p>
+      </p>
+    </div>
+    <form class="buttons" action="/" method="post" target="_blank">
+      <button class="quoteButton" type="submit" name="button" value="signup">Sign Me Up For More Celebrity Quotes!</button>
+    </form>
+  </div>
+  <script src="js/to-do-list.js"></script>
+</body>
+<footer>&copy Emily Huang 2020</footer>
+
+</html>
