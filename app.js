@@ -19,6 +19,7 @@ let weatherDescription = "";
 let icon = "";
 let imageURL = "";
 let place = "";
+let currentIP = "0.0.0.0";
 
 
 app.get("/", function(req, res) {
@@ -31,8 +32,18 @@ app.get("/", function(req, res) {
     ipAddr = req.connection.remoteAddress;
   }
 
+  var tempList = ipAddr.split(".");
+  var temp = tempList[0]+"."+tempList[1]+"."+tempList[2];
+  var ipList = currentIP.split(".");
+  var temp2 = ipList[0]+"."+ipList[1]+"."+ipList[2];
 
-  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  if(temp !== temp2){
+    currentIP = ipAddr;
+    tasks = [];
+  }
+
+
+  let ipurl = "https://api.ipstack.com/"+currentIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
   // let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   https.get(ipurl, function(response) {
