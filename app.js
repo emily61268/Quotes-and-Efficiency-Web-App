@@ -33,11 +33,11 @@ app.get("/", function(req, res) {
   }
 
   var tempList = ipAddr.split(".");
-  var temp = tempList[0]+"."+tempList[1]+"."+tempList[2];
+  var temp1 = tempList[0]+"."+tempList[1]+"."+tempList[2];
   var ipList = currentIP.split(".");
   var temp2 = ipList[0]+"."+ipList[1]+"."+ipList[2];
 
-  if(temp !== temp2){
+  if(temp1 !== temp2){
     currentIP = ipAddr;
     tasks = [];
   }
