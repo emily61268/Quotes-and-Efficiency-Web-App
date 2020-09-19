@@ -171,7 +171,7 @@ app.get("/lists/:customize", function(req, res) {
   });
 
 
-  Item.find({$or:[{ip: cusIP}, {email: emailPerm}]}, function(err, items) {
+  Item.find({ip: cusIP}, function(err, items) {
     if (!err) {
       res.render("list", {
         newTasks: items,
@@ -179,7 +179,7 @@ app.get("/lists/:customize", function(req, res) {
         temperature: temp,
         imgURL: imageURL,
         cityName: place,
-        emailID: emailAddr,
+        emailID: emailPerm,
         ipID: cusIP
       });
     }
