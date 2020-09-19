@@ -18,30 +18,44 @@
 
     <h1>Good morning.</h1>
     <p class="headingText">It's <span class="dateTime"></span>.
-      <br /> The temperature in <span class="city"></span> is <%= temperature %> degrees Celcius.
+      <br /> The temperature in <%= cityName %> is <%= temperature %> degrees Celcius.
       <br /> The weather is currently <%= weather %>.
       <br /> <img src=<%= imgURL %>>
     </p>
 
   </div>
 
-  <div class="box">
-    <% for(var i = 0; i < newTasks.length; i++){ %>
-    <div class="item">
-      <input type="checkbox">
-      <p> <%=newTasks[i]%> </p>
-    </div>
-    <% } %>
+  <div class="messageBox">
+    <h3>If you can't see your list, please enter your email below.</h3>
+    <form class="loginpage" action="/login" method="post">
+      <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
+      <button class="quoteButton login" type="submit">Grab My List</button>
+    </form>
+    <p id="noworry">Again, don't worry, you won't receive any spam from me. :)</p>
+  </div>
 
-    <form class="item" action="/" method="post">
+
+  <div class="box">
+    <%newTasks.forEach(function(task){%>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input type="checkbox" onChange="this.form.submit()" name="checkbox" value="<%=task._id%>">
+          <p> <%=task.name%> </p>
+        </div>
+      </form>
+    <%});%>
+
+
+
+    <form class="item" action="/list" method="post">
       <input type="text" name="taskName" placeholder="What's on your list today?" autofocus autocomplete="off" required>
       <button class="itemButton" type="submit" name="button" value="addTask">+</button>
     </form>
   </div>
+
+
+
   <div class="buttonBox">
-    <form class="buttons" action="/" method="post">
-      <button class="buttons quoteButton" value="clear" type="submit">Start a New List</button>
-    </form>
     <button class="buttons quoteButton" id="flip" type="submit">Time For Some Celebrity Quotes!</button>
     <div id="panel">
       <p id="quotes">
@@ -49,7 +63,7 @@
         <p id="author">- Jane Goodall</p>
       </p>
     </div>
-    <form class="buttons" action="/" method="post" target="_blank">
+    <form class="buttons" action="/list" method="post" target="_blank">
       <button class="quoteButton" type="submit" name="button" value="signup">Sign Me Up For More Celebrity Quotes!</button>
     </form>
   </div>

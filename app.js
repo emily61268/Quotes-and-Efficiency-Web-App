@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
+const mongoose = require("mongoose");
 
 
 
@@ -12,6 +13,18 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 
+//Use MongoDB to store lists
+mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+
+const itemSchema = {
+  name: String,
+  email: String
+};
+
+const Item = mongoose.model("Item", itemSchema);
+
+
+
 
 let tasks = [];
 let temp = "";
@@ -19,38 +32,36 @@ let weatherDescription = "";
 let icon = "";
 let imageURL = "";
 let place = "";
-let currentIP = "0.0.0.0";
+var ipAddr;
+let emailAddr;
 
 
 app.get("/", function(req, res) {
 
-  var ipAddr = req.headers["x-forwarded-for"];
-  if (ipAddr){
-    var list = ipAddr.split(",");
-    ipAddr = list[list.length-1];
-  } else {
-    ipAddr = req.connection.remoteAddress;
-  }
+  //UC
+  // ipAddr = req.headers["x-forwarded-for"];
+  // if (ipAddr){
+  //   var list = ipAddr.split(",");
+  //   ipAddr = list[list.length-1];
+  // } else {
+  //   ipAddr = req.connection.remoteAddress;
+  // }
 
-  var tempList = ipAddr.split(".");
-  var temp1 = tempList[0]+"."+tempList[1]+"."+tempList[2];
-  var ipList = currentIP.split(".");
-  var temp2 = ipList[0]+"."+ipList[1]+"."+ipList[2];
+  //UC
+  //let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  //let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
-  if(temp1 !== temp2){
-    currentIP = ipAddr;
-    tasks = [];
-  }
-
-
-  let ipurl = "https://api.ipstack.com/"+currentIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  // let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   https.get(ipurl, function(response) {
     response.on("data", function(data){
       //Get user location
       let ipData = JSON.parse(data);
-      place = ipData.city + "," + ipData.region_name;
+
+      //UC
+      //place = ipData.city + ", " + ipData.region_name;
+
+      place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -69,6 +80,7 @@ app.get("/", function(req, res) {
           /*Recommend: Use JSON Viewer Aweson (Chorme extension) to get the
             path of the specific data that you want to use.
           */
+          place = weatherData.name;
           temp = parseInt(weatherData.main.temp);
           weatherDescription = weatherData.weather[0].description;
           icon = weatherData.weather[0].icon;
@@ -79,28 +91,125 @@ app.get("/", function(req, res) {
     });
   });
 
-  console.log(temp, weatherDescription);
-  res.render("list", {
-    newTasks: tasks,
+  res.render("login", {
     weather: weatherDescription,
     temperature: temp,
     imgURL: imageURL,
+    cityName: place
   });
+
 });
 
+
+app.get("/list", function(req, res) {
+
+  //UC
+  // ipAddr = req.headers["x-forwarded-for"];
+  // if (ipAddr){
+  //   var list = ipAddr.split(",");
+  //   ipAddr = list[list.length-1];
+  // } else {
+  //   ipAddr = req.connection.remoteAddress;
+  // }
+
+  //UC
+  //let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  //let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+
+
+  https.get(ipurl, function(response) {
+    response.on("data", function(data){
+      //Get user location
+      let ipData = JSON.parse(data);
+
+      //UC
+      //place = ipData.city + ", " + ipData.region_name;
+
+      place = "Alpine, Texas";
+
+      //Get current weather
+      let apiID = "cd10a33402703dfcf0920bec36d23c54";
+      let units = "metric";
+      let url = "https://api.openweathermap.org/data/2.5/weather?q=" + place + "&appid=" + apiID + "&units=" + units;
+      https.get(url, function(response) {
+        //Check the url/API key is working by checking the status code.
+        console.log(response.statusCode);
+
+        //Fetch partial/all data from API and print it via console log.
+        response.on("data", function(data) {
+
+          let weatherData = JSON.parse(data);
+
+          //After we parsed it into JSON format, we can use it to get data.
+          /*Recommend: Use JSON Viewer Aweson (Chorme extension) to get the
+            path of the specific data that you want to use.
+          */
+          place = weatherData.name;
+          temp = parseInt(weatherData.main.temp);
+          weatherDescription = weatherData.weather[0].description;
+          icon = weatherData.weather[0].icon;
+          imageURL = "https://openweathermap.org/img/wn/" + icon + ".png";
+
+        });
+      });
+    });
+  });
+
+  Item.find({email: emailAddr}, function(err, items){
+    if(!err){
+      console.log("Items found.");
+      res.render("list", {
+        newTasks: items,
+        weather: weatherDescription,
+        temperature: temp,
+        imgURL: imageURL,
+        cityName: place
+      });
+    }
+  });
+
+});
+
+
+app.post("/login", function(req, res){
+  emailAddr = req.body.emailAddr;
+  res.redirect("/list");
+});
+
+app.post("/loginagain", function(req, res){
+  emailAddr = req.body.emailAddr;
+  res.redirect("/list#loaded");
+});
+
+
 //Check which button is pressed.
-app.post("/", function(req, res) {
+app.post("/list", function(req, res) {
   var buttonValue = req.body.button;
   if (buttonValue === "addTask") {
     let task = req.body.taskName;
-    tasks.push(task);
-    res.redirect("https://quotes-and-efficiency.herokuapp.com/#loaded");
+
+    const item = new Item({
+      name: task,
+      email: emailAddr
+    });
+
+    item.save();
+
+    res.redirect("/list#loaded");
   } else if (buttonValue === "signup") {
     res.redirect("https://signup-page-for-q-and-e.herokuapp.com/");
-  } else {
-    tasks = [];
-    res.redirect("/");
   }
+});
+
+app.post("/delete", function(req, res){
+  let checkedTaskID = req.body.checkbox;
+  Item.findByIdAndRemove(checkedTaskID, function(err){
+    if(!err){
+      console.log("Item successfully deleted.");
+      res.redirect("/list#loaded");
+    }
+  });
 });
 
 

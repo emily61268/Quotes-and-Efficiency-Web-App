@@ -17,16 +17,6 @@ window.onload = function() {
 }
 
 $(document).ready(function() {
-  var access_key = 'eb287c9a351aa80dd5b81e4fa9a45f6b';
-
-  // get the API result via jQuery.ajax
-  $.ajax({
-    url: 'https://api.ipstack.com/check?access_key=' + access_key + "&fields=ip,city,region_name",
-    dataType: 'jsonp',
-    success: function(json) {
-      $("span.city").html("<span name=ipcity value=" + json.ip + ">" + json.city + ", " + json.region_name + "</span>");
-    }
-  });
 
   //Get date and time
   let today = new Date();
