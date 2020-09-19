@@ -179,7 +179,7 @@ app.get("/lists/:customize", function(req, res) {
         temperature: temp,
         imgURL: imageURL,
         cityName: place,
-        emailAddress: emailAddr,
+        emailID: emailAddr,
         ipID: cusIP
       });
     }
