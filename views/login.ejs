@@ -36,16 +36,18 @@
       ip = data.ip;
 
     });
+    $('.hiddenIP').val(ip);
+    $('#loginbutton').attr("href", "/lists/" + ip);
   </script>
 
-  <input style="display:none" type="text" name="ipName" value=<%= ip %>>
+  <input class="hiddenIP" type="hidden" name="ipName" value="">
 
   <div class="messageBox">
     <h3>To start, please enter your email.</h3>
     <form class="loginpage" action="/login" method="post">
       <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <input style="display:none" type="text" name="ipName" value=<%= ip %>>
-      <a id="loginbutton" href="/lists/<%= ip %>">
+      <input class="hiddenIP" type="hidden" name="ipName" value="">
+      <a id="loginbutton" href="/lists/">
         <button class="quoteButton login" type="submit">Start My List</button>
       </a>
 
