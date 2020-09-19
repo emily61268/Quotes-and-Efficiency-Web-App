@@ -29,18 +29,22 @@
 
   </div>
 
-  <% var ip; %>
-  <% function getIP(json){ %>
-  <%   ip = json.ip; %>
-  <% }; %>
+  <script>
+    var ip;
+    $.getJSON("https://api.ipify.org?format=json", function(data) {
 
-  <input style="display:none" type="text" name="ipName" value= <%= ip %>>
+      ip = data.ip;
+
+    });
+  </script>
+
+  <input style="display:none" type="text" name="ipName" value=<%= ip %>>
 
   <div class="messageBox">
     <h3>To start, please enter your email.</h3>
     <form class="loginpage" action="/login" method="post">
       <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <input style="display:none" type="text" name="ipName" value= <%= ip %>>
+      <input style="display:none" type="text" name="ipName" value=<%= ip %>>
       <a id="loginbutton" href="/lists/<%= ip %>">
         <button class="quoteButton login" type="submit">Start My List</button>
       </a>
