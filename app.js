@@ -14,7 +14,11 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Use MongoDB to store lists
-mongoose.connect("mongodb://localhost:27017/todolistDB", {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false});
+mongoose.connect("mongodb://localhost:27017/todolistDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false
+});
 
 const itemSchema = {
   name: String,
@@ -22,6 +26,7 @@ const itemSchema = {
 };
 
 const Item = mongoose.model("Item", itemSchema);
+
 
 
 
@@ -54,7 +59,7 @@ app.get("/", function(req, res) {
 
 
   https.get(ipurl, function(response) {
-    response.on("data", function(data){
+    response.on("data", function(data) {
       //Get user location
       let ipData = JSON.parse(data);
 
@@ -119,7 +124,7 @@ app.get("/list", function(req, res) {
 
 
   https.get(ipurl, function(response) {
-    response.on("data", function(data){
+    response.on("data", function(data) {
       //Get user location
       let ipData = JSON.parse(data);
 
@@ -156,9 +161,8 @@ app.get("/list", function(req, res) {
     });
   });
 
-  Item.find({email: emailAddr}, function(err, items){
-    if(!err){
-      console.log("Items found.");
+  Item.find({email: emailAddr}, function(err, items) {
+    if (!err) {
       res.render("list", {
         newTasks: items,
         weather: weatherDescription,
@@ -172,12 +176,49 @@ app.get("/list", function(req, res) {
 });
 
 
-app.post("/login", function(req, res){
+app.post("/login", function(req, res) {
   emailAddr = req.body.emailAddr;
+
+  Item.find({email: emailAddr}, function(err, items) {
+    if (!err) {
+      if (items.length == 0) {
+        const welcome1 = new Item({
+          name: "Welcome to your to-do list!",
+          email: emailAddr
+        });
+
+
+        const welcome2 = new Item({
+          name: "Hit Enter or the + button to add a new item.",
+          email: emailAddr
+        });
+
+
+        const welcome3 = new Item({
+          name: "<-- Hit this checkbox to delete an item.",
+          email: emailAddr
+        });
+
+
+        const welcome4 = new Item({
+          name: "Press \"Time For Some Celebrity Quotes!\" button multiple times, you will get different quotes!",
+          email: emailAddr
+        });
+
+        const welcome = [welcome1, welcome2, welcome3, welcome4];
+
+        Item.insertMany(welcome, function(err) {
+          if (!err) {
+            console.log("successfully insert welcome.");
+          }
+        });
+      }
+    }
+  });
   res.redirect("/list");
 });
 
-app.post("/loginagain", function(req, res){
+app.post("/loginagain", function(req, res) {
   emailAddr = req.body.emailAddr;
   res.redirect("/list#loaded");
 });
@@ -187,6 +228,8 @@ app.post("/loginagain", function(req, res){
 app.post("/list", function(req, res) {
   var buttonValue = req.body.button;
   if (buttonValue === "addTask") {
+
+    //Add new task to DB
     let task = req.body.taskName;
 
     const item = new Item({
@@ -202,10 +245,10 @@ app.post("/list", function(req, res) {
   }
 });
 
-app.post("/delete", function(req, res){
+app.post("/delete", function(req, res) {
   let checkedTaskID = req.body.checkbox;
-  Item.findByIdAndRemove(checkedTaskID, function(err){
-    if(!err){
+  Item.findByIdAndRemove(checkedTaskID, function(err) {
+    if (!err) {
       console.log("Item successfully deleted.");
       res.redirect("/list#loaded");
     }
