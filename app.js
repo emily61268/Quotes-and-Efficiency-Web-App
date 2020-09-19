@@ -36,21 +36,23 @@ let imageURL = "";
 let place = "";
 var ipAddr;
 let emailAddr;
+let cusIP;
 
 
 app.get("/", function(req, res) {
+  cusIP = req.body.ipName;
+  //UC
+  // ipAddr = req.headers["x-forwarded-for"];
+  // if (ipAddr){
+  //   var list = ipAddr.split(",");
+  //   ipAddr = list[list.length-1];
+  // } else {
+  //   ipAddr = req.connection.remoteAddress;
+  // }
 
   //UC
-  ipAddr = req.headers["x-forwarded-for"];
-  if (ipAddr){
-    var list = ipAddr.split(",");
-    ipAddr = list[list.length-1];
-  } else {
-    ipAddr = req.connection.remoteAddress;
-  }
-
-  //UC
-  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   //Test
   //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
@@ -62,10 +64,10 @@ app.get("/", function(req, res) {
       let ipData = JSON.parse(data);
 
       //UC
-      place = ipData.city + ", " + ipData.region_name;
+      // place = ipData.city + ", " + ipData.region_name;
 
       //Test
-      // place = "Alpine, Texas";
+      place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -105,22 +107,24 @@ app.get("/", function(req, res) {
 });
 
 
-app.get("/list", function(req, res) {
+app.get("/lists/:customize", function(req, res) {
+  cusIP = req.params.topic;
+  //UC
+  // ipAddr = req.headers["x-forwarded-for"];
+  // if (ipAddr){
+  //   var list = ipAddr.split(",");
+  //   ipAddr = list[list.length-1];
+  // } else {
+  //   ipAddr = req.connection.remoteAddress;
+  // }
 
   //UC
-  ipAddr = req.headers["x-forwarded-for"];
-  if (ipAddr){
-    var list = ipAddr.split(",");
-    ipAddr = list[list.length-1];
-  } else {
-    ipAddr = req.connection.remoteAddress;
-  }
+  // let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
-  //UC
-  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   //Test
-  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -132,7 +136,7 @@ app.get("/list", function(req, res) {
       place = ipData.city + ", " + ipData.region_name;
 
       //Test
-      // place = "Alpine, Texas";
+      //place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -178,7 +182,9 @@ app.get("/list", function(req, res) {
 
 
 app.post("/login", function(req, res) {
+  console.log("successfully post");
   emailAddr = req.body.emailAddr;
+  cusIP = req.body.ipName;
 
   Item.find({email: emailAddr}, function(err, items) {
     if (!err) {
@@ -216,12 +222,12 @@ app.post("/login", function(req, res) {
       }
     }
   });
-  res.redirect("/list");
+  res.redirect("/lists/"+cusIP);
 });
 
 app.post("/loginagain", function(req, res) {
   emailAddr = req.body.emailAddr;
-  res.redirect("/list#loaded");
+  res.redirect("/lists/" + cusIP + "#loaded");
 });
 
 
@@ -240,7 +246,7 @@ app.post("/list", function(req, res) {
 
     item.save();
 
-    res.redirect("/list#loaded");
+    res.redirect("/lists/" + cusIP+ "#loaded");
   } else if (buttonValue === "signup") {
     res.redirect("https://signup-page-for-q-and-e.herokuapp.com/");
   }
@@ -251,7 +257,7 @@ app.post("/delete", function(req, res) {
   Item.findByIdAndRemove(checkedTaskID, function(err) {
     if (!err) {
       console.log("Item successfully deleted.");
-      res.redirect("/list#loaded");
+      res.redirect("/lists/" + cusIP + "#loaded");
     }
   });
 });

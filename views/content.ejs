@@ -9,11 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Merienda+One&family=Montserrat:wght@300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
-  <script src="https://api.ipify.org?format=jsonp&callback=getIP"></script>
-  <script>
 
-
-  </script>
 </head>
 
 <body>
@@ -29,26 +25,33 @@
 
   </div>
 
-  <% var ip; %>
-  <% function getIP(json){ %>
-  <%   ip = json.ip; %>
-  <% }; %>
-
-  <input style="display:none" type="text" name="ipName" value= <%= ip %>>
-
   <div class="messageBox">
-    <h3>To start, please enter your email.</h3>
-    <form class="loginpage" action="/login" method="post">
+    <h3>If you can't see your list, please enter your email below.</h3>
+    <form class="loginpage" action="/loginagain" method="post">
       <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <input style="display:none" type="text" name="ipName" value= <%= ip %>>
-      <a id="loginbutton" href="/lists/<%= ip %>">
-        <button class="quoteButton login" type="submit">Start My List</button>
-      </a>
-
+      <button class="quoteButton login" type="submit">Grab My List</button>
     </form>
-    <p id="noworry">Don't worry, you won't receive any spam from me. :)</p>
+    <p id="noworry">Again, don't worry, you won't receive any spam from me. :)</p>
   </div>
 
+
+  <div class="box">
+    <%newTasks.forEach(function(task){%>
+      <form action="/delete" method="post">
+        <div class="item">
+          <input type="checkbox" onChange="this.form.submit()" name="checkbox" value="<%=task._id%>">
+          <p> <%=task.name%> </p>
+        </div>
+      </form>
+    <%});%>
+
+
+
+    <form class="item" action="/list" method="post">
+      <input type="text" name="taskName" placeholder="What's on your list today?" autofocus autocomplete="off" required>
+      <button class="itemButton" type="submit" name="button" value="addTask">+</button>
+    </form>
+  </div>
 
 
 
