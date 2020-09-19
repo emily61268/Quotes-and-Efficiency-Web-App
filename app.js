@@ -42,17 +42,17 @@ let cusIP;
 app.get("/", function(req, res) {
   cusIP = req.body.ipName;
   //UC
-  // ipAddr = req.headers["x-forwarded-for"];
-  // if (ipAddr){
-  //   var list = ipAddr.split(",");
-  //   ipAddr = list[list.length-1];
-  // } else {
-  //   ipAddr = req.connection.remoteAddress;
-  // }
+  ipAddr = req.headers["x-forwarded-for"];
+  if (ipAddr){
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length-1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
 
   //UC
-  // let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  //let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   //Test
   //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
@@ -64,10 +64,10 @@ app.get("/", function(req, res) {
       let ipData = JSON.parse(data);
 
       //UC
-      // place = ipData.city + ", " + ipData.region_name;
+      place = ipData.city + ", " + ipData.region_name;
 
       //Test
-      place = "Alpine, Texas";
+      //place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -101,7 +101,8 @@ app.get("/", function(req, res) {
     weather: weatherDescription,
     temperature: temp,
     imgURL: imageURL,
-    cityName: place
+    cityName: place,
+    ipName: ipAddr
   });
 
 });
@@ -110,17 +111,17 @@ app.get("/", function(req, res) {
 app.get("/lists/:customize", function(req, res) {
   cusIP = req.params.topic;
   //UC
-  // ipAddr = req.headers["x-forwarded-for"];
-  // if (ipAddr){
-  //   var list = ipAddr.split(",");
-  //   ipAddr = list[list.length-1];
-  // } else {
-  //   ipAddr = req.connection.remoteAddress;
-  // }
+  ipAddr = req.headers["x-forwarded-for"];
+  if (ipAddr){
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length-1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
 
   //UC
-  // let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  //let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   //Test
@@ -182,7 +183,6 @@ app.get("/lists/:customize", function(req, res) {
 
 
 app.post("/login", function(req, res) {
-  console.log("successfully post");
   emailAddr = req.body.emailAddr;
   cusIP = req.body.ipName;
 

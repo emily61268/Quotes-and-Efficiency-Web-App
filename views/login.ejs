@@ -30,14 +30,13 @@
   </div>
 
 
-  <input class="hiddenIP" type="hidden" name="ipName" value="">
 
   <div class="messageBox">
     <h3>To start, please enter your email.</h3>
     <form class="loginpage" action="/login" method="post">
       <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <input class="hiddenIP" type="hidden" name="ipName" value="">
-      <a id="loginbutton" href="/lists/">
+      <input class="hiddenIP" type="hidden" name="ipName" value="<%= ipName %>">
+      <a id="loginbutton" href="/lists/<%= ipName %>">
         <button class="quoteButton login" type="submit">Start My List</button>
       </a>
 
