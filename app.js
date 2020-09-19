@@ -14,12 +14,13 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Use MongoDB to store lists
-mongoose.connect("mongodb://localhost:27017/todolistDB", {
+mongoose.connect("mongodb+srv://admin-emily:PUP267me@to-do-list.d7vdq.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
 });
 
+//Setup item schema
 const itemSchema = {
   name: String,
   email: String
@@ -28,10 +29,6 @@ const itemSchema = {
 const Item = mongoose.model("Item", itemSchema);
 
 
-
-
-
-let tasks = [];
 let temp = "";
 let weatherDescription = "";
 let icon = "";
@@ -44,18 +41,19 @@ let emailAddr;
 app.get("/", function(req, res) {
 
   //UC
-  // ipAddr = req.headers["x-forwarded-for"];
-  // if (ipAddr){
-  //   var list = ipAddr.split(",");
-  //   ipAddr = list[list.length-1];
-  // } else {
-  //   ipAddr = req.connection.remoteAddress;
-  // }
+  ipAddr = req.headers["x-forwarded-for"];
+  if (ipAddr){
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length-1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
 
   //UC
-  //let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  //let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+
+  //Test
+  //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -64,9 +62,10 @@ app.get("/", function(req, res) {
       let ipData = JSON.parse(data);
 
       //UC
-      //place = ipData.city + ", " + ipData.region_name;
+      place = ipData.city + ", " + ipData.region_name;
 
-      place = "Alpine, Texas";
+      //Test
+      // place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -109,18 +108,19 @@ app.get("/", function(req, res) {
 app.get("/list", function(req, res) {
 
   //UC
-  // ipAddr = req.headers["x-forwarded-for"];
-  // if (ipAddr){
-  //   var list = ipAddr.split(",");
-  //   ipAddr = list[list.length-1];
-  // } else {
-  //   ipAddr = req.connection.remoteAddress;
-  // }
+  ipAddr = req.headers["x-forwarded-for"];
+  if (ipAddr){
+    var list = ipAddr.split(",");
+    ipAddr = list[list.length-1];
+  } else {
+    ipAddr = req.connection.remoteAddress;
+  }
 
   //UC
-  //let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  //let ipurl = "https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+
+  //Test
+  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -129,9 +129,10 @@ app.get("/list", function(req, res) {
       let ipData = JSON.parse(data);
 
       //UC
-      //place = ipData.city + ", " + ipData.region_name;
+      place = ipData.city + ", " + ipData.region_name;
 
-      place = "Alpine, Texas";
+      //Test
+      // place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
