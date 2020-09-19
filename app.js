@@ -23,8 +23,10 @@ mongoose.connect("mongodb+srv://admin-emily:PUP267me@to-do-list.d7vdq.mongodb.ne
 //Setup item schema
 const itemSchema = {
   name: String,
-  email: String
+  email: String,
+  ip: String
 };
+
 
 const Item = mongoose.model("Item", itemSchema);
 
@@ -110,6 +112,7 @@ app.get("/", function(req, res) {
 
 app.get("/lists/:customize", function(req, res) {
   cusIP = req.params.topic;
+  const emailPerm = emailAddr;
   //UC
   ipAddr = req.headers["x-forwarded-for"];
   if (ipAddr){
@@ -167,14 +170,17 @@ app.get("/lists/:customize", function(req, res) {
     });
   });
 
-  Item.find({email: emailAddr}, function(err, items) {
+
+  Item.find({$or:[{ip: cusIP}, {email: emailPerm}]}, function(err, items) {
     if (!err) {
       res.render("list", {
         newTasks: items,
         weather: weatherDescription,
         temperature: temp,
         imgURL: imageURL,
-        cityName: place
+        cityName: place,
+        emailAddress: emailAddr,
+        ipID: cusIP
       });
     }
   });
@@ -191,25 +197,29 @@ app.post("/login", function(req, res) {
       if (items.length == 0) {
         const welcome1 = new Item({
           name: "Welcome to your to-do list!",
-          email: emailAddr
+          email: emailAddr,
+          ip: cusIP
         });
 
 
         const welcome2 = new Item({
           name: "Hit Enter or the + button to add a new item.",
-          email: emailAddr
+          email: emailAddr,
+          ip: cusIP
         });
 
 
         const welcome3 = new Item({
           name: "<-- Hit this checkbox to delete an item.",
-          email: emailAddr
+          email: emailAddr,
+          ip: cusIP
         });
 
 
         const welcome4 = new Item({
           name: "Press \"Time For Some Celebrity Quotes!\" button multiple times, you will get different quotes!",
-          email: emailAddr
+          email: emailAddr,
+          ip: cusIP
         });
 
         const welcome = [welcome1, welcome2, welcome3, welcome4];
@@ -241,7 +251,8 @@ app.post("/list", function(req, res) {
 
     const item = new Item({
       name: task,
-      email: emailAddr
+      email: emailAddr,
+      ip: cusIP
     });
 
     item.save();
