@@ -29,18 +29,6 @@
 
   </div>
 
-  <script>
-    $(document).ready(function(){
-        var ip;
-        $.getJSON("https://api.ipify.org?format=json", function(data) {
-
-          ip = data.ip;
-
-        });
-        $('.hiddenIP').val(ip);
-        $('#loginbutton').attr("href", "/lists/" + ip);
-    });
-  </script>
 
   <input class="hiddenIP" type="hidden" name="ipName" value="">
 

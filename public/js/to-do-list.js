@@ -16,6 +16,20 @@ window.onload = function() {
     }
 }
 
+$(document).ready(function(){
+    var ip;
+    $.ajax({
+    url: 'https://api.ipstack.com/check?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=ip,
+    dataType: 'jsonp',
+    success: function(json) {
+      ip = json.ip;
+    }
+});
+    $('.hiddenIP').val(ip);
+    $('#loginbutton').attr("href", "/lists/" + ip);
+});
+
+
 $(document).ready(function() {
 
   //Get date and time
