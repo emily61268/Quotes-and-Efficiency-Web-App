@@ -35,11 +35,7 @@
     <h3>To start, please enter your email.</h3>
     <form class="loginpage" action="/login" method="post">
       <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <input class="hiddenIP" type="hidden" name="ipName" value="<%= ipName %>">
-      <a id="loginbutton" href="/lists/<%= ipName %>">
         <button class="quoteButton login" type="submit">Start My List</button>
-      </a>
-
     </form>
     <p id="noworry">Don't worry, you won't receive any spam from me. :)</p>
   </div>

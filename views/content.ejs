@@ -25,16 +25,9 @@
 
   </div>
 
-  <div class="messageBox">
-    <h3>If you can't see your list, please enter your email below.</h3>
-    <form class="loginpage" action="/loginagain" method="post">
-      <input class="emailInput" type="email" name="emailAddr" placeholder="Email Address" autofocus required>
-      <button class="quoteButton login" type="submit">Grab My List</button>
-    </form>
-    <p id="noworry">Again, don't worry, you won't receive any spam from me. :)</p>
-  </div>
+  <input type="hidden" name="emailID" value="<%= emailID %>"></input>
+  <input type="hidden" name="userName" value="<%= userName %>"></input>
 
-  <input type="hidden" name="emailAddress" value="<%= emailID %>">
 
   <div class="box">
     <%newTasks.forEach(function(task){%>
@@ -43,14 +36,16 @@
           <input type="checkbox" onChange="this.form.submit()" name="checkbox" value="<%=task._id%>">
           <p> <%=task.name%> </p>
         </div>
+        <input type="hidden" name="emailID" value="<%= emailID %>"></input>
+        <input type="hidden" name="userName" value="<%= userName %>"></input>
       </form>
     <%});%>
 
 
 
     <form class="item" action="/list" method="post">
-      <input type="text" name="taskName" placeholder="What's on your list today?" autofocus autocomplete="off" required>
-      <button class="itemButton" type="submit" name="button" value="addTask">+</button>
+      <input type="text" name="newItem" placeholder="What's on your list today?" autofocus autocomplete="off" required>
+      <button class="itemButton" type="submit" name="button" value="<%= emailID %>">+</button>
     </form>
   </div>
 

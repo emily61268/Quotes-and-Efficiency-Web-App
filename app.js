@@ -2,7 +2,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
+const _ = require('lodash');
 const mongoose = require("mongoose");
+
 
 
 
@@ -14,21 +16,59 @@ app.use(bodyParser.urlencoded({
 }));
 
 //Use MongoDB to store lists
+//UC
 mongoose.connect("mongodb+srv://admin-emily:PUP267me@to-do-list.d7vdq.mongodb.net/todolistDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
 });
 
+//For test
+// mongoose.connect("mongodb://localhost:27017/todolistDB", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useFindAndModify: false
+// });
+
+
 //Setup item schema
 const itemSchema = {
   name: String,
-  email: String,
-  ip: String
+  email: String
 };
 
 
 const Item = mongoose.model("Item", itemSchema);
+
+const welcome1 = new Item({
+  name: "Welcome to your to-do list!",
+});
+
+
+const welcome2 = new Item({
+  name: "Hit Enter or the + button to add a new item.",
+});
+
+
+const welcome3 = new Item({
+  name: "<-- Hit this checkbox to delete an item.",
+});
+
+
+const welcome4 = new Item({
+  name: "Press \"Time For Some Celebrity Quotes!\" button multiple times, you will get different quotes!",
+});
+
+const welcome = [welcome1, welcome2, welcome3, welcome4];
+
+
+const listSchema = {
+  name: String,
+  email: String,
+  items: [itemSchema]
+};
+
+const List = mongoose.model("List", listSchema);
 
 
 let temp = "";
@@ -38,11 +78,10 @@ let imageURL = "";
 let place = "";
 var ipAddr;
 let emailAddr;
-let cusIP;
+
 
 
 app.get("/", function(req, res) {
-  cusIP = req.body.ipName;
   //UC
   ipAddr = req.headers["x-forwarded-for"];
   if (ipAddr){
@@ -54,10 +93,9 @@ app.get("/", function(req, res) {
 
   //UC
   let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  //let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
   //Test
-  //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -69,7 +107,7 @@ app.get("/", function(req, res) {
       place = ipData.city + ", " + ipData.region_name;
 
       //Test
-      //place = "Alpine, Texas";
+      // place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -111,24 +149,24 @@ app.get("/", function(req, res) {
 
 
 app.get("/lists/:customize", function(req, res) {
-  cusIP = req.params.topic;
-  const emailPerm = emailAddr;
+  const userName = _.lowerCase(req.params.customize);
+  const emailPerm = _.lowerCase(emailAddr);
+
   //UC
   ipAddr = req.headers["x-forwarded-for"];
   if (ipAddr){
-    var list = ipAddr.split(",");
-    ipAddr = list[list.length-1];
+    var templist = ipAddr.split(",");
+    ipAddr = templist[templist.length-1];
   } else {
     ipAddr = req.connection.remoteAddress;
   }
 
   //UC
   let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
-  //let ipurl = "https://api.ipstack.com/"+cusIP+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   //Test
-  //let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -140,7 +178,7 @@ app.get("/lists/:customize", function(req, res) {
       place = ipData.city + ", " + ipData.region_name;
 
       //Test
-      //place = "Alpine, Texas";
+      // place = "Alpine, Texas";
 
       //Get current weather
       let apiID = "cd10a33402703dfcf0920bec36d23c54";
@@ -170,18 +208,31 @@ app.get("/lists/:customize", function(req, res) {
     });
   });
 
-
-  Item.find({ip: cusIP}, function(err, items) {
+  List.findOne({name: userName}, function(err, foundList) {
     if (!err) {
-      res.render("list", {
-        newTasks: items,
-        weather: weatherDescription,
-        temperature: temp,
-        imgURL: imageURL,
-        cityName: place,
-        emailID: emailPerm,
-        ipID: cusIP
-      });
+      if (!foundList) {
+
+        //Create a new list
+        const list = new List ({
+          name: userName,
+          email: emailPerm,
+          items: welcome
+        });
+
+        list.save();
+        res.redirect("/lists/" + userName);
+      } else {
+        //Show an existing list
+        res.render("list", {
+          newTasks: foundList.items,
+          weather: weatherDescription,
+          temperature: temp,
+          imgURL: imageURL,
+          cityName: place,
+          emailID: foundList.email,
+          userName: foundList.name
+        });
+      }
     }
   });
 
@@ -189,88 +240,53 @@ app.get("/lists/:customize", function(req, res) {
 
 
 app.post("/login", function(req, res) {
-  emailAddr = req.body.emailAddr;
-  cusIP = req.body.ipName;
+  emailAddr = _.lowerCase(req.body.emailAddr);
+  const emailParts = emailAddr.split("@");
+  const userName = emailParts[0];
 
-  Item.find({email: emailAddr}, function(err, items) {
-    if (!err) {
-      if (items.length == 0) {
-        const welcome1 = new Item({
-          name: "Welcome to your to-do list!",
-          email: emailAddr,
-          ip: cusIP
-        });
-
-
-        const welcome2 = new Item({
-          name: "Hit Enter or the + button to add a new item.",
-          email: emailAddr,
-          ip: cusIP
-        });
-
-
-        const welcome3 = new Item({
-          name: "<-- Hit this checkbox to delete an item.",
-          email: emailAddr,
-          ip: cusIP
-        });
-
-
-        const welcome4 = new Item({
-          name: "Press \"Time For Some Celebrity Quotes!\" button multiple times, you will get different quotes!",
-          email: emailAddr,
-          ip: cusIP
-        });
-
-        const welcome = [welcome1, welcome2, welcome3, welcome4];
-
-        Item.insertMany(welcome, function(err) {
-          if (!err) {
-            console.log("successfully insert welcome.");
-          }
-        });
-      }
-    }
-  });
-  res.redirect("/lists/"+cusIP);
-});
-
-app.post("/loginagain", function(req, res) {
-  emailAddr = req.body.emailAddr;
-  res.redirect("/lists/" + cusIP + "#loaded");
+  res.redirect("/lists/"+userName);
 });
 
 
 //Check which button is pressed.
 app.post("/list", function(req, res) {
-  var buttonValue = req.body.button;
-  if (buttonValue === "addTask") {
+  const buttonValue = req.body.button;
+  const userName = req.body.userName;
+  const task = req.body.newItem;
+
+  //Create new task to DB
+  const item = new Item({
+    name: task,
+    email: buttonValue,
+  });
+
+  if (buttonValue === "signup") {
+    res.redirect("https://signup-page-for-q-and-e.herokuapp.com/");
+  } else {
 
     //Add new task to DB
-    let task = req.body.taskName;
-
-    const item = new Item({
-      name: task,
-      email: emailAddr,
-      ip: cusIP
+    List.findOne({email: buttonValue}, function(err, foundList){
+      foundList.items.push(item);
+      foundList.save();
+      res.redirect("/lists/" + foundList.name + "#loaded");
     });
-
-    item.save();
-
-    res.redirect("/lists/" + cusIP+ "#loaded");
-  } else if (buttonValue === "signup") {
-    res.redirect("https://signup-page-for-q-and-e.herokuapp.com/");
   }
 });
 
 app.post("/delete", function(req, res) {
-  let checkedTaskID = req.body.checkbox;
-  Item.findByIdAndRemove(checkedTaskID, function(err) {
-    if (!err) {
-      console.log("Item successfully deleted.");
-      res.redirect("/lists/" + cusIP + "#loaded");
+  const checkedTaskID = req.body.checkbox;
+  const userName = req.body.userName;
+  const inputID = req.body.emailID;
+
+  //1. First find the object in lists collection using customer's email address.
+  //2. Then pull the item from the items array that has the ID of checkedTaskID.
+  List.findOneAndUpdate({email: inputID}, {$pull: {items: {_id: checkedTaskID}}}, function(err, foundList){
+    if(!err){
+      res.redirect("/lists/" + foundList.name + "#loaded");
     }
   });
+
+
 });
 
 
