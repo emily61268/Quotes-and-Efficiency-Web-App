@@ -10,7 +10,10 @@ var settings = {
 }
 
 window.onload = function() {
-  window.location.reload();
+    if(!window.location.hash) {
+        window.location = window.location + '#loaded';
+        window.location.reload();
+    }
 }
 
 $(document).ready(function() {
