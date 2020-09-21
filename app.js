@@ -23,7 +23,7 @@ mongoose.connect("mongodb+srv://admin-emily:PUP267me@to-do-list.d7vdq.mongodb.ne
   useFindAndModify: false
 });
 
-//For test
+//For local test
 // mongoose.connect("mongodb://localhost:27017/todolistDB", {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
@@ -246,6 +246,7 @@ app.post("/login", function(req, res) {
 
   res.redirect("/lists/"+userName);
 });
+
 
 
 //Check which button is pressed.
