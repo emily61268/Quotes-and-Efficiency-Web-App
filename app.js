@@ -281,7 +281,7 @@ app.post("/delete", function(req, res) {
   //2. Then pull the item from the items array that has the ID of checkedTaskID.
   List.findOneAndUpdate({email: inputID}, {$pull: {items: {_id: checkedTaskID}}}, function(err, foundList){
     if(!err){
-      res.redirect("/lists/" + foundList.names + "#loaded");
+      res.redirect("/lists/" + foundList.name + "#loaded");
     }
   });
 
