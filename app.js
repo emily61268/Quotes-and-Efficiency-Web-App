@@ -267,7 +267,7 @@ app.post("/list", function(req, res) {
     List.findOne({email: buttonValue}, function(err, foundList){
       foundList.items.push(item);
       foundList.save();
-      res.redirect("/lists/" + foundList.name + "#loaded");
+      res.redirect("/lists/" + foundList.name);
     });
   }
 });
@@ -281,7 +281,7 @@ app.post("/delete", function(req, res) {
   //2. Then pull the item from the items array that has the ID of checkedTaskID.
   List.findOneAndUpdate({email: inputID}, {$pull: {items: {_id: checkedTaskID}}}, function(err, foundList){
     if(!err){
-      res.redirect("/lists/" + foundList.name + "#loaded");
+      res.redirect("/lists/" + foundList.name);
     }
   });
 
