@@ -142,7 +142,6 @@ app.get("/", function(req, res) {
     temperature: temp,
     imgURL: imageURL,
     cityName: place,
-    ipName: ipAddr
   });
 
 });
@@ -230,7 +229,7 @@ app.get("/lists/:customize", function(req, res) {
           imgURL: imageURL,
           cityName: place,
           emailID: foundList.email,
-          userName: foundList.name
+          userName: foundList.name,
         });
       }
     }
@@ -241,8 +240,7 @@ app.get("/lists/:customize", function(req, res) {
 
 app.post("/login", function(req, res) {
   emailAddr = _.lowerCase(req.body.emailAddr);
-  const emailParts = emailAddr.split("@");
-  const userName = emailParts[0];
+  const userName = emailAddr;
 
   res.redirect("/lists/"+userName);
 });
