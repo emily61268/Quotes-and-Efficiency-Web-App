@@ -14,5 +14,5 @@ Quotes & Efficiency is a scalable network application that creates to-do-list we
 
 
 
-<em>Demo:</em>
+<b>Demo:</b>
 <img src="q-and-e_demo.gif">
