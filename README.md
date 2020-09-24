@@ -15,4 +15,4 @@ Quotes & Efficiency is a scalable network application that creates to-do-list we
 
 
 <b>Demo:</b>
-<img src="q-and-e_demo.gif">
+<a href="https://quotes-and-efficiency.herokuapp.com/"><img src="q-and-e_demo.gif"></a>
