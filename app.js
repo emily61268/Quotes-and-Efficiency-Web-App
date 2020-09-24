@@ -17,14 +17,14 @@ app.use(bodyParser.urlencoded({
 
 //Use MongoDB to store lists
 //UC
-mongoose.connect("mongodb+srv://admin-emily:PUP267me@to-do-list.d7vdq.mongodb.net/todolistDB", {
+mongoose.connect("mongodbURL", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false
 });
 
 //For local test
-// mongoose.connect("mongodb://localhost:27017/todolistDB", {
+// mongoose.connect("mongodbURL", {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 //   useFindAndModify: false
@@ -92,10 +92,10 @@ app.get("/", function(req, res) {
   }
 
   //UC
-  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=?&fields=city,region_name";
 
   //Test
-  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=?&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -110,7 +110,7 @@ app.get("/", function(req, res) {
       // place = "Alpine, Texas";
 
       //Get current weather
-      let apiID = "cd10a33402703dfcf0920bec36d23c54";
+      let apiID = "?";
       let units = "metric";
       let url = "https://api.openweathermap.org/data/2.5/weather?q=" + place + "&appid=" + apiID + "&units=" + units;
       https.get(url, function(response) {
@@ -161,11 +161,11 @@ app.get("/lists/:customize", function(req, res) {
   }
 
   //UC
-  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  let ipurl = "https://api.ipstack.com/"+ipAddr+"?access_key=?&fields=city,region_name";
 
 
   //Test
-  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=eb287c9a351aa80dd5b81e4fa9a45f6b&fields=city,region_name";
+  // let ipurl = "https://api.ipstack.com/24.75.195.117?access_key=?&fields=city,region_name";
 
 
   https.get(ipurl, function(response) {
@@ -180,7 +180,7 @@ app.get("/lists/:customize", function(req, res) {
       // place = "Alpine, Texas";
 
       //Get current weather
-      let apiID = "cd10a33402703dfcf0920bec36d23c54";
+      let apiID = "";
       let units = "metric";
       let url = "https://api.openweathermap.org/data/2.5/weather?q=" + place + "&appid=" + apiID + "&units=" + units;
       https.get(url, function(response) {

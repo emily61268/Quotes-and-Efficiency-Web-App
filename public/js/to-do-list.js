@@ -5,7 +5,7 @@ var settings = {
   "method": "GET",
   "headers": {
     "x-rapidapi-host": "quotes15.p.rapidapi.com",
-    "x-rapidapi-key": "262c7ebcffmsh8849fcbb203742bp1dcdddjsn28a1c31e979a"
+    "x-rapidapi-key": ""
   }
 }
 
