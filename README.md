@@ -1,4 +1,4 @@
-# Quotes-and-Efficiency-Web-App
+# Quotes & Efficiency Web App
 
 Quotes & Efficiency is a scalable network application that creates to-do-list webpages for different users dynamically. The features include displaying users’ current local temperature and weather condition, storing users’ lists persistently in the online database, and generating different celebrity quotes for entertainment.
 
